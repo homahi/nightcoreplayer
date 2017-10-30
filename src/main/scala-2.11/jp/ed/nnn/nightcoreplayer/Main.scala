@@ -1,10 +1,11 @@
 package jp.ed.nnn.nightcoreplayer
 
+
 import java.io.File
 import javafx.application.Application
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.FXCollections
-import javafx.event.{ActionEvent, Event, EventHandler}
+import javafx.event.{ActionEvent, EventHandler}
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.cell.PropertyValueFactory
@@ -88,17 +89,40 @@ class Main extends Application {
         }
       }
     })
-    playButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler[Event] {
-      override def handle(event: Event): Unit = {
+    playButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler[MouseEvent]() {
+      override def handle(event: MouseEvent): Unit = {
         playButton.setStyle("-fx-body-color: Black")
       }
     })
 
-    playButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler[Event] {
-      override def handle(event: Event): Unit = {
+    playButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler[MouseEvent]() {
+      override def handle(event: MouseEvent): Unit = {
         playButton.setStyle("-fx-background-color: Black")
       }
     })
+
+    // pause button
+    val pauseButtonImage = new Image(getClass.getResourceAsStream("pause.png"))
+    val pauseButton = new Button()
+    pauseButton.setGraphic(new ImageView(pauseButtonImage))
+    pauseButton.setStyle("-fx-background-color: Black")
+    pauseButton.setOnAction(new EventHandler[ActionEvent] {
+      override def handle(event: ActionEvent): Unit = {
+        if(mediaView.getMediaPlayer != null) mediaView.getMediaPlayer.pause()
+      }
+    })
+    pauseButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler[MouseEvent]() {
+      override def handle(event: MouseEvent): Unit = {
+        pauseButton.setStyle("-fx-body-color: Black")
+      }
+    })
+    pauseButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler[MouseEvent]() {
+      override def handle(event: MouseEvent): Unit = {
+        pauseButton.setStyle("-fx-background-color: Black")
+      }
+    })
+
+    toolBar.getChildren.addAll(playButton, pauseButton, timeLabel)
 
 
     val baseBorderPane = new BorderPane()
