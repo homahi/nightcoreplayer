@@ -99,6 +99,29 @@ class Main extends Application {
       }
     })
 
+    // last button
+    val lastButtonImage = new Image(getClass.getResourceAsStream("last.png"))
+    val lastButton = new Button()
+    lastButton.setGraphic(new ImageView(firstButtonImage))
+    lastButton.setStyle("-fx-background-color: Black")
+    lastButton.setOnAction(new EventHandler[ActionEvent] {
+      override def handle(event: ActionEvent): Unit =
+        if (mediaView.getMediaPlayer != null) {
+          playNext(tableView, mediaView, timeLabel)
+        }
+    })
+    lastButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler[MouseEvent] {
+      override def handle(event: MouseEvent): Unit = {
+        lastButton.setStyle("-fx-body-color: Black")
+      }
+    })
+
+    lastButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler[MouseEvent] {
+      override def handle(event: MouseEvent): Unit = {
+        lastButton.setStyle("-fx-background-color: Black")
+      }
+    })
+
     // back button
     val backButtonImage = new Image(getClass.getResourceAsStream("back.png"))
     val backButton = new Button()
