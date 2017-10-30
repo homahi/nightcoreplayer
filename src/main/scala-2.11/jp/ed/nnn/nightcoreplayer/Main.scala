@@ -1,6 +1,5 @@
 package jp.ed.nnn.nightcoreplayer
 
-
 import java.io.File
 import javafx.application.Application
 import javafx.beans.value.{ChangeListener, ObservableValue}
@@ -77,6 +76,33 @@ class Main extends Application {
 
     tableView.getColumns.setAll(fileNameColumn, timeColumn, deleteActionColumn)
 
+    // back button
+    val backButtonImage = new Image(getClass.getResourceAsStream("back.png"))
+    val backButton = new Button()
+    backButton.setGraphic(new ImageView(backButtonImage))
+    backButton.setStyle("-fx-background-color: Black")
+    backButton.setOnAction(new EventHandler[ActionEvent] {
+      override def handle(event: ActionEvent): Unit =
+        if (mediaView.getMediaPlayer != null) {
+          mediaView.getMediaPlayer.seek(
+            mediaView.getMediaPlayer.getCurrentTime.subtract(new Duration(10000))
+          )
+        }
+    })
+
+    backButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler[MouseEvent] {
+      override def handle(event: MouseEvent): Unit = {
+        backButton.setStyle("-fx-body-color: Black")
+      }
+    })
+
+    backButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler[MouseEvent] {
+      override def handle(event: MouseEvent): Unit = {
+        backButton.setStyle("-fx-background-color: Black")
+      }
+    })
+
+
     val playButtonImage = new Image(getClass.getResourceAsStream("play.png"))
     val playButton = new Button()
     playButton.setGraphic(new ImageView(playButtonImage))
@@ -108,7 +134,7 @@ class Main extends Application {
     pauseButton.setStyle("-fx-background-color: Black")
     pauseButton.setOnAction(new EventHandler[ActionEvent] {
       override def handle(event: ActionEvent): Unit = {
-        if(mediaView.getMediaPlayer != null) mediaView.getMediaPlayer.pause()
+        if (mediaView.getMediaPlayer != null) mediaView.getMediaPlayer.pause()
       }
     })
     pauseButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler[MouseEvent]() {
