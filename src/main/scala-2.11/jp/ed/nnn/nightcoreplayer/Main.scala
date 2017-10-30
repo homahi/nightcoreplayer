@@ -76,6 +76,29 @@ class Main extends Application {
 
     tableView.getColumns.setAll(fileNameColumn, timeColumn, deleteActionColumn)
 
+    // first butoon
+    val firstButtonImage = new Image(getClass.getResourceAsStream("back.png"))
+    val firstButton = new Button()
+    firstButton.setGraphic(new ImageView(firstButtonImage))
+    firstButton.setStyle("-fx-background-color: Black")
+    firstButton.setOnAction(new EventHandler[ActionEvent] {
+      override def handle(event: ActionEvent): Unit =
+        if (mediaView.getMediaPlayer != null) {
+          playPre(tableView, mediaView, timeLabel)
+        }
+    })
+    firstButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler[MouseEvent] {
+      override def handle(event: MouseEvent): Unit = {
+        firstButton.setStyle("-fx-body-color: Black")
+      }
+    })
+
+    firstButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler[MouseEvent] {
+      override def handle(event: MouseEvent): Unit = {
+        firstButton.setStyle("-fx-background-color: Black")
+      }
+    })
+
     // back button
     val backButtonImage = new Image(getClass.getResourceAsStream("back.png"))
     val backButton = new Button()
@@ -271,6 +294,16 @@ class Main extends Application {
       elapsed.toMinutes.toInt % 60,
       elapsed.toSeconds.toInt % 60
     )
+  }
+
+  private[this] def playPre(tableView: TableView[Movie], mediaView: MediaView, timelabel:Label):Unit={
+    val selectionModel = tableView.getSelectionModel
+    if(selectionModel.isEmpty) return
+    val index = selectionModel.getSelectedIndex
+    val preIndex = (tableView.getItems.size() + index - 1) % tableView.getItems.size()
+    selectionModel.select(preIndex)
+    val movie = selectionModel.getSelectedItem
+    playMovie(movie,tableView,mediaView,timelabel)
   }
 
   private[this] def formatTime(elapsed: Duration, duration: Duration): String =
