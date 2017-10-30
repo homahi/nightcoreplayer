@@ -4,7 +4,7 @@ import java.io.File
 import javafx.application.Application
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.FXCollections
-import javafx.event.{ActionEvent, EventHandler}
+import javafx.event.{ActionEvent, Event, EventHandler}
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.cell.PropertyValueFactory
@@ -102,7 +102,33 @@ class Main extends Application {
       }
     })
 
+    // 早送り
+    val forwardButtonImage = new Image(getClass.getResourceAsStream("forward.png"))
+    val forwardButton = new Button()
+    forwardButton.setGraphic(new ImageView(forwardButtonImage))
+    forwardButton.setStyle("-fx-background-color: Black")
+    forwardButton.setOnAction(new EventHandler[ActionEvent] {
+      override def handle(event: ActionEvent): Unit =
+        if(mediaView.getMediaPlayer!=null){
+          mediaView.getMediaPlayer.seek(
+            mediaView.getMediaPlayer.getCurrentTime.add(new Duration(10000))
+          )
+        }
+    })
+    forwardButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler[MouseEvent] {
+      override def handle(event: MouseEvent): Unit = {
+        forwardButton.setStyle("-fx-body-color: Black")
+      }
+    })
 
+    forwardButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler[MouseEvent] {
+      override def handle(event: MouseEvent): Unit = {
+        forwardButton.setStyle("-fx-background-color: Black")
+      }
+    })
+
+
+    // 再生ボタン
     val playButtonImage = new Image(getClass.getResourceAsStream("play.png"))
     val playButton = new Button()
     playButton.setGraphic(new ImageView(playButtonImage))
@@ -148,7 +174,7 @@ class Main extends Application {
       }
     })
 
-    toolBar.getChildren.addAll(playButton, pauseButton, timeLabel)
+    toolBar.getChildren.addAll(backButton,playButton, pauseButton, forwardButton,timeLabel)
 
 
     val baseBorderPane = new BorderPane()
