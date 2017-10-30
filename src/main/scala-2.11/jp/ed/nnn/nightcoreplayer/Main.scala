@@ -4,11 +4,12 @@ import java.io.File
 import javafx.application.Application
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.FXCollections
-import javafx.event.EventHandler
+import javafx.event.{ActionEvent, Event, EventHandler}
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.control._
+import javafx.scene.image.{Image, ImageView}
 import javafx.scene.input.{DragEvent, MouseEvent, TransferMode}
 import javafx.scene.layout.{BorderPane, HBox}
 import javafx.scene.media.{Media, MediaPlayer, MediaView}
@@ -34,7 +35,7 @@ class Main extends Application {
     timeLabel.setText("00:00:00/00:00:00")
     timeLabel.setTextFill(Color.WHITE)
 
-    val toolBar = new HBox(timeLabel)
+    val toolBar = new HBox()
     toolBar.setMinHeight(toolBarMinHeight)
     toolBar.setAlignment(Pos.CENTER)
     toolBar.setStyle("-fx-background-color: Black")
@@ -74,6 +75,31 @@ class Main extends Application {
     })
 
     tableView.getColumns.setAll(fileNameColumn, timeColumn, deleteActionColumn)
+
+    val playButtonImage = new Image(getClass.getResourceAsStream("play.png"))
+    val playButton = new Button()
+    playButton.setGraphic(new ImageView(playButtonImage))
+    playButton.setStyle("-fx-background-color: Black")
+    playButton.setOnAction(new EventHandler[ActionEvent] {
+      override def handle(event: ActionEvent): Unit = {
+        val selectionModel = tableView.getSelectionModel
+        if (mediaView.getMediaPlayer != null && !selectionModel.isEmpty) {
+          mediaView.getMediaPlayer.play()
+        }
+      }
+    })
+    playButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler[Event] {
+      override def handle(event: Event): Unit = {
+        playButton.setStyle("-fx-body-color: Black")
+      }
+    })
+
+    playButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler[Event] {
+      override def handle(event: Event): Unit = {
+        playButton.setStyle("-fx-background-color: Black")
+      }
+    })
+
 
     val baseBorderPane = new BorderPane()
     baseBorderPane.setStyle("-fx-background-color: Black")
